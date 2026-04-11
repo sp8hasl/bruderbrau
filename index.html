@@ -50,13 +50,10 @@
       border-bottom: 1px solid var(--border);
     }
 
-    .nav-logo {
-      font-family: 'Unbounded', sans-serif;
-      font-weight: 400;
-      font-size: 13px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--text);
+    .nav-logo img {
+      height: 48px;
+      width: auto;
+      display: block;
     }
 
     .nav-links {
@@ -122,6 +119,12 @@
     .btn-ghost:hover {
       color: var(--highlight);
       text-decoration-color: var(--highlight);
+    }
+
+    .hero-logo {
+      height: 80px;
+      width: auto;
+      margin-bottom: 24px;
     }
 
     /* ── Hero ── */
@@ -352,13 +355,10 @@
     }
 
     .footer-logo {
-      font-family: 'Unbounded', sans-serif;
-      font-weight: 400;
-      font-size: 13px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--bg);
       display: block;
+      height: 40px;
+      width: auto;
+      opacity: 0.6;
       margin-bottom: 10px;
     }
 
@@ -482,7 +482,7 @@
 
   <!-- ── Nav ── -->
   <nav>
-    <a href="#top" class="nav-logo">BruderBrau</a>
+    <a href="#top" class="nav-logo"><img src="logo.png" alt="Bruder Brau"></a>
     <ul class="nav-links">
       <li><a href="#about">О нас</a></li>
       <li><a href="#cooperation">Сотрудничество</a></li>
@@ -494,6 +494,7 @@
   <section class="hero" id="top">
     <div class="hero-content">
       <span class="hero-eyebrow fade-in">Братск · Иркутская обл. · Сибирь</span>
+      <img src="logo.png" alt="Bruder Brau" class="hero-logo fade-in">
       <h1 class="fade-in" data-delay="1">
         Варим<br>
         честно.<br>
@@ -599,7 +600,7 @@
   <!-- ── Footer ── -->
   <footer>
     <div class="footer-left">
-      <span class="footer-logo">BruderBrau</span>
+      <img src="logo.png" alt="Bruder Brau" class="footer-logo">
       <span class="footer-meta">Братск, Иркутская обл. &nbsp;·&nbsp; © 2026</span>
     </div>
     <div class="footer-right">
