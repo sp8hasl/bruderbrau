@@ -134,6 +134,7 @@
       flex-direction: column;
       justify-content: center;
       padding: 80px 72px 80px 52px;
+      background-color: #1a1208;
     }
 
     .hero-eyebrow {
@@ -142,7 +143,7 @@
       font-size: 11px;
       letter-spacing: 3px;
       text-transform: uppercase;
-      color: var(--accent);
+      color: #9a7c55;
       margin-bottom: 36px;
     }
 
@@ -151,7 +152,7 @@
       font-weight: 400;
       font-size: 56px;
       line-height: 1.10;
-      color: var(--text);
+      color: #f0e8d8;
       margin-bottom: 28px;
       letter-spacing: -0.5px;
     }
@@ -164,7 +165,7 @@
     .hero-subtext {
       font-size: 18px;
       line-height: 1.85;
-      color: var(--body-text);
+      color: #c8b89a;
       max-width: 380px;
       margin-bottom: 52px;
     }
@@ -235,7 +236,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(15, 10, 5, 0.65);
+      background: rgba(8, 5, 2, 0.78);
     }
 
     .about-content {
@@ -282,7 +283,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(20, 14, 8, 0.75);
+      background: rgba(10, 6, 2, 0.82);
     }
 
     .paths-header {
@@ -407,6 +408,14 @@
       color: var(--accent);
     }
 
+    /* ── Beer Animation ── */
+    .beer-anim {
+      position: absolute;
+      bottom: 40px;
+      right: 48px;
+      opacity: 0.85;
+    }
+
     /* ── Scroll Animations ── */
     .fade-in {
       opacity: 0;
@@ -520,10 +529,10 @@
       <h1 class="fade-in" data-delay="1">
         Варим<br>
         честно.<br>
-        <em>С 2018.</em>
+        <em>С 2016.</em>
       </h1>
       <p class="hero-subtext fade-in" data-delay="2">
-        Небольшая пивоварня в сердце Сибири. Мы не гонимся за объёмами — мы следуем рецептам и уважаем зерно.
+        Небольшая пивоварня в сердце Сибири. Мы не гонимся за объёмами: следуем рецептам и уважаем зерно.
       </p>
       <div class="hero-buttons fade-in" data-delay="3">
         <a href="#cooperation" class="btn-solid">Сотрудничество</a>
@@ -561,12 +570,35 @@
       </h2>
       <div class="about-body fade-in" data-delay="2">
         <p>
-          BruderBrau появился в Братске не случайно. Здесь, в сибирском городе с крепким характером, мы нашли то, чего нет в столичной суете: время, чистую воду и желание делать честный продукт. Название — это игра слов: «Братск» и немецкое <em>Bruder</em>, брат. Потому что пиво — это про доверие.
+          BruderBrau появился в Братске не случайно. Здесь, в сибирском городе с крепким характером, мы нашли то, чего нет в столичной суете: время, чистую воду и желание делать честный продукт. Название это игра слов: «Братск» и немецкое <em>Bruder</em>, брат. Потому что пиво это про доверие.
         </p>
         <p>
-          Мы варим по старым немецким и чешским рецептам, адаптированным под местную воду и сибирский вкус. Никаких лишних добавок, никакой спешки. Каждая партия — небольшая. Каждый сорт — обдуманный.
+          Мы варим по старым немецким и чешским рецептам, адаптированным под местную воду и сибирский вкус. Никаких лишних добавок, никакой спешки. Каждая партия небольшая. Каждый сорт обдуманный.
         </p>
       </div>
+    </div>
+    <div class="beer-anim" id="beerAnim">
+      <svg width="80" height="140" viewBox="0 0 80 140">
+        <defs>
+          <clipPath id="glassClip">
+            <polygon points="18,30 62,30 68,130 12,130"/>
+          </clipPath>
+        </defs>
+        <!-- Glass outline -->
+        <polygon points="18,30 62,30 68,130 12,130" fill="none" stroke="rgba(232,200,122,0.6)" stroke-width="1.5"/>
+        <!-- Handle -->
+        <path d="M62,55 Q82,55 82,75 Q82,95 62,95" fill="none" stroke="rgba(232,200,122,0.6)" stroke-width="1.5"/>
+        <!-- Foam -->
+        <ellipse cx="40" cy="30" rx="22" ry="8" fill="rgba(255,248,220,0.0)" id="foam"/>
+        <!-- Beer fill -->
+        <rect x="13" y="130" width="54" height="0" fill="rgba(186,117,23,0.75)" clip-path="url(#glassClip)" id="beerFill"/>
+        <!-- Bubbles -->
+        <circle cx="25" cy="120" r="2" fill="rgba(232,200,122,0.0)" id="b1"/>
+        <circle cx="40" cy="100" r="1.5" fill="rgba(232,200,122,0.0)" id="b2"/>
+        <circle cx="55" cy="110" r="2" fill="rgba(232,200,122,0.0)" id="b3"/>
+        <!-- Pour stream -->
+        <path d="M40,0 Q38,15 40,30" stroke="rgba(186,117,23,0.0)" stroke-width="4" fill="none" id="stream" stroke-linecap="round"/>
+      </svg>
     </div>
   </section>
 
@@ -582,7 +614,7 @@
         <span class="card-number">01</span>
         <h3 class="card-title">Сотрудничество</h3>
         <p class="card-body">
-          Для ресторанов, баров, магазинов и кафе. Мы работаем напрямую — без посредников, с фиксированными ценами и стабильными поставками. Свяжитесь с нами, и мы обсудим условия под ваш формат.
+          Для ресторанов, баров, магазинов и кафе. Мы работаем напрямую: без посредников, фиксированные цены, стабильные поставки. Свяжитесь с нами, и мы обсудим условия под ваш формат.
         </p>
         <a href="mailto:hello@bruderbrau.ru" class="btn-solid">Написать нам</a>
       </div>
@@ -594,9 +626,9 @@
           Наше пиво можно найти в нескольких точках Братска. Список обновляется по мере расширения.
         </p>
         <ul class="card-list">
-          <li>ул. Ленина, 17 — магазин «Сибирские напитки»</li>
-          <li>пр. Металлургов, 45 — бар «Северная смола»</li>
-          <li>ул. Крупской, 8 — гастромаркет «Братский»</li>
+          <li>ул. Ленина, 17, магазин «Сибирские напитки»</li>
+          <li>пр. Металлургов, 45, бар «Северная смола»</li>
+          <li>ул. Крупской, 8, гастромаркет «Братский»</li>
         </ul>
         <a href="#cooperation" class="btn-ghost">Стать точкой продаж</a>
       </div>
@@ -655,6 +687,59 @@
         }
       });
     });
+  </script>
+
+  <script>
+    // ── Beer pour animation ──
+    (function(){
+      var animated = false;
+      var observer = new IntersectionObserver(function(entries){
+        if(entries[0].isIntersecting && !animated){
+          animated = true;
+          var beerFill = document.getElementById('beerFill');
+          var foam = document.getElementById('foam');
+          var stream = document.getElementById('stream');
+          var b1 = document.getElementById('b1');
+          var b2 = document.getElementById('b2');
+          var b3 = document.getElementById('b3');
+
+          // Stream appears first
+          stream.style.transition = 'all 0.3s ease';
+          stream.setAttribute('stroke','rgba(186,117,23,0.8)');
+
+          // Beer fills up over 1.8s
+          var start = null;
+          var duration = 1800;
+          function fillBeer(ts){
+            if(!start) start = ts;
+            var progress = Math.min((ts - start) / duration, 1);
+            var eased = progress < 0.5 ? 2*progress*progress : -1+(4-2*progress)*progress;
+            var fillH = eased * 95;
+            var fillY = 130 - fillH;
+            beerFill.setAttribute('y', fillY);
+            beerFill.setAttribute('height', fillH);
+            if(progress < 1){ requestAnimationFrame(fillBeer); }
+            else {
+              // Stream disappears, foam appears
+              stream.setAttribute('stroke','rgba(186,117,23,0)');
+              foam.style.transition = 'all 0.4s ease';
+              foam.setAttribute('fill','rgba(255,248,220,0.9)');
+              // Bubbles rise
+              [b1,b2,b3].forEach(function(b,i){
+                setTimeout(function(){
+                  b.setAttribute('fill','rgba(232,200,122,0.7)');
+                  b.style.transition = 'all 0.3s ease';
+                }, i * 150);
+              });
+            }
+          }
+          requestAnimationFrame(fillBeer);
+        }
+      }, {threshold: 0.4});
+
+      var target = document.getElementById('beerAnim');
+      if(target) observer.observe(target);
+    })();
   </script>
 
 </body>
