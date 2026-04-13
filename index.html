@@ -507,6 +507,40 @@
 </head>
 <body>
 
+  <!-- ── Fixed scroll beer glass ── -->
+  <div id="fixedBeer" style="position:fixed;right:32px;bottom:40px;z-index:100;pointer-events:none;opacity:0;transition:opacity 0.6s;">
+    <svg id="beerScrollSvg" width="90" height="200" viewBox="0 0 90 200" style="overflow:visible;filter:drop-shadow(0 4px 24px rgba(0,0,0,0.5));">
+      <defs>
+        <clipPath id="gc2">
+          <polygon points="15,30 75,30 82,175 8,175"/>
+        </clipPath>
+      </defs>
+      <!-- Pour stream -->
+      <line id="pour" x1="45" y1="-30" x2="45" y2="30" stroke="rgba(186,117,23,0.9)" stroke-width="6" stroke-linecap="round" opacity="0"/>
+      <!-- Glass body -->
+      <polygon points="15,30 75,30 82,175 8,175" fill="rgba(255,255,255,0.04)" stroke="rgba(232,200,122,0.75)" stroke-width="1.5"/>
+      <!-- Glass shine -->
+      <line x1="24" y1="38" x2="20" y2="168" stroke="rgba(255,255,255,0.07)" stroke-width="3"/>
+      <!-- Handle -->
+      <path d="M75,65 Q102,65 102,100 Q102,135 75,135" fill="none" stroke="rgba(232,200,122,0.75)" stroke-width="1.5"/>
+      <!-- Beer liquid -->
+      <rect id="beer" x="9" y="175" width="73" height="0" fill="rgba(180,110,15,0.85)" clip-path="url(#gc2)"/>
+      <!-- Beer shine overlay -->
+      <rect id="beerShine" x="9" y="175" width="20" height="0" fill="rgba(255,200,80,0.12)" clip-path="url(#gc2)"/>
+      <!-- Foam -->
+      <ellipse id="foam2" cx="45" cy="30" rx="30" ry="11" fill="rgba(255,248,225,0)"/>
+      <!-- Foam bubbles on top -->
+      <circle id="fc1" cx="30" cy="28" r="5" fill="rgba(255,248,225,0)"/>
+      <circle id="fc2" cx="50" cy="25" r="7" fill="rgba(255,248,225,0)"/>
+      <circle id="fc3" cx="62" cy="27" r="4" fill="rgba(255,248,225,0)"/>
+      <!-- Rising bubbles -->
+      <circle class="bub" cx="28" cy="160" r="2.5" fill="rgba(232,200,122,0)" opacity="0"/>
+      <circle class="bub" cx="45" cy="140" r="2" fill="rgba(232,200,122,0)" opacity="0"/>
+      <circle class="bub" cx="60" cy="155" r="3" fill="rgba(232,200,122,0)" opacity="0"/>
+      <circle class="bub" cx="35" cy="170" r="1.5" fill="rgba(232,200,122,0)" opacity="0"/>
+    </svg>
+  </div>
+
   <!-- ── Nav ── -->
   <nav>
     <a href="#top" class="nav-logo"><img src="logo-Photoroom.png" alt="Bruder Brau"></a>
@@ -751,6 +785,109 @@
         }
         requestAnimationFrame(fill);
       }
+    })();
+  </script>
+
+  <script>
+    // ── Scroll-driven beer glass ──
+    (function(){
+      var glass    = document.getElementById('fixedBeer');
+      var beer     = document.getElementById('beer');
+      var shine    = document.getElementById('beerShine');
+      var pour     = document.getElementById('pour');
+      var foam2    = document.getElementById('foam2');
+      var fc1      = document.getElementById('fc1');
+      var fc2      = document.getElementById('fc2');
+      var fc3      = document.getElementById('fc3');
+      var bubbles  = document.querySelectorAll('.bub');
+      if (!glass) return;
+
+      var maxH           = 138;
+      var lastProgress   = 0;
+      var bubblesStarted = false;
+      var scrollTimer    = null;
+
+      function getProgress() {
+        var scrollTop  = window.pageYOffset || document.documentElement.scrollTop;
+        var docHeight  = document.documentElement.scrollHeight - window.innerHeight;
+        return docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
+      }
+
+      function rgba(r,g,b,a){ return 'rgba('+r+','+g+','+b+','+a+')'; }
+
+      function updateGlass(progress) {
+        // Fade in after first movement
+        if (progress > 0.01) glass.style.opacity = '1';
+
+        var h = progress * maxH;
+        var y = 175 - h;
+
+        // Liquid fill
+        beer.setAttribute('height', Math.max(0, h));
+        beer.setAttribute('y', y);
+        shine.setAttribute('height', Math.max(0, h));
+        shine.setAttribute('y', y);
+
+        // Foam at ~88% fill
+        var foamA = progress > 0.88 ? Math.min((progress - 0.88) / 0.07, 1) * 0.92 : 0;
+        foam2.setAttribute('fill', rgba(255,248,225,foamA));
+        fc1.setAttribute('fill',   rgba(255,248,225, foamA * 0.95));
+        fc2.setAttribute('fill',   rgba(255,248,225, foamA));
+        fc3.setAttribute('fill',   rgba(255,248,225, foamA * 0.9));
+
+        // Start bubble loop once there's visible beer
+        if (progress > 0.08 && !bubblesStarted) {
+          bubblesStarted = true;
+          Array.from(bubbles).forEach(function(b, i){
+            setTimeout(function(){ cycleBubble(b); }, i * 550);
+          });
+        }
+
+        lastProgress = progress;
+      }
+
+      function cycleBubble(b) {
+        var p = lastProgress;
+        if (p < 0.08) { setTimeout(function(){ cycleBubble(b); }, 800); return; }
+
+        var h      = p * maxH;
+        var baseY  = 175 - h * 0.15;               // start near bottom of liquid
+        var topY   = 175 - h + 4;                   // end near top of liquid
+        var dur    = 1100 + Math.random() * 900;
+
+        b.setAttribute('cy', baseY);
+        b.setAttribute('opacity', '0.65');
+        b.setAttribute('fill', 'rgba(232,200,122,0.65)');
+
+        var t0 = null;
+        (function rise(ts){
+          if (!t0) t0 = ts;
+          var pp = Math.min((ts - t0) / dur, 1);
+          b.setAttribute('cy',      baseY - pp * (baseY - topY));
+          b.setAttribute('opacity', (0.65 * (1 - pp)).toFixed(3));
+          if (pp < 1) { requestAnimationFrame(rise); }
+          else {
+            b.setAttribute('opacity', '0');
+            setTimeout(function(){ cycleBubble(b); }, 300 + Math.random() * 700);
+          }
+        })(performance.now());
+      }
+
+      // Scroll handler — show pour stream while scrolling
+      window.addEventListener('scroll', function(){
+        var p = getProgress();
+        updateGlass(p);
+
+        if (p > 0.01 && p < 0.99) pour.setAttribute('opacity', '1');
+
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(function(){
+          pour.setAttribute('opacity', '0');
+        }, 280);
+      }, { passive: true });
+
+      // Init on load (page may already be scrolled)
+      updateGlass(getProgress());
     })();
   </script>
 
